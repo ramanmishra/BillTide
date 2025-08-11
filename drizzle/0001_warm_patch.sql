@@ -1,0 +1,1 @@
+ALTER TABLE "subscriptions" ALTER COLUMN "billing_cycle" SET DATA TYPE varchar(50);

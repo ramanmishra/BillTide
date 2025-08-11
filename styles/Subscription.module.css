@@ -1,0 +1,14 @@
+/* styles/Subscription.module.css */
+.form { display: grid; gap: 12px; margin-bottom: 16px; }
+.row { display: grid; gap: 12px; grid-template-columns: repeat(3, 1fr); }
+.input, .select, .textarea { padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+.textarea { min-height: 80px; resize: vertical; }
+.submit { padding: 10px 14px; background:#0ea5e9; color:#fff; border:none; border-radius:6px; cursor:pointer; }
+.error { color:#e11d48; }
+
+/* augment styles/Dashboard.module.css */
+.list { margin-top: 16px; display: grid; gap: 12px; }
+.card { border:1px solid #eee; border-radius:10px; padding:12px; background:#fff; }
+.cardHead { display:flex; justify-content:space-between; margin-bottom:6px; }
+.cardMeta { display:flex; gap:12px; color:#6b7280; font-size: 0.9rem; margin-bottom: 6px; }
+.cardNotes { color:#374151; font-size: 0.95rem; }

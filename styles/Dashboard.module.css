@@ -1,0 +1,150 @@
+.row {
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(3, minmax(0, 1fr)); /* ← minmax prevents overflow */
+  }
+  
+  .input, .select, .textarea {
+    width: 100%;
+    min-width: 0;               /* ← allow shrinking in grid */
+    box-sizing: border-box;     /* ← include padding in width */
+  }
+  
+  /* responsive collapse for smaller screens & tight modals */
+  @media (max-width: 640px) {
+    .row {
+      grid-template-columns: 1fr;
+    }
+  }
+
+.container {
+    padding: 2rem;
+    text-align: center;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 2rem;
+  }
+  
+  .logoutButton {
+    padding: 0.75rem 1.5rem;
+    background-color: #e53935;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logoutButton:hover {
+    background-color: #c62828;
+  }
+  
+  .dangerButton {
+    padding: 6px 10px;
+    background: #ef4444;
+    color: #fff;
+    border: 0;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .dangerButton:hover {
+    background: #dc2626;
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-top: 16px;
+  }
+  
+  /* REPLACE the existing .card rule and add hover */
+  .card {
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 14px;
+    background: #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0,0,0,.08);
+  }
+  
+  /* You already have .cardHead; just enhance alignment if needed */
+  .cardHead { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  
+  /* ADD */
+  .amount { font-weight: 700; }
+  .pill { padding: 4px 8px; border-radius: 999px; background: #f1f5f9; font-size: .8rem; }
+  .chip { padding: 2px 8px; border-radius: 999px; background: #eef2ff; color:#3730a3; font-size: .75rem; }
+  .cardMeta { display:flex; gap:8px; flex-wrap: wrap; color:#64748b; font-size: .85rem; margin-bottom:8px; }
+  .cardNotes { color:#334155; font-size: .95rem; margin-top:6px; }
+  
+  .actions { display:flex; gap:8px; justify-content:flex-end; margin-top:10px; }
+  .btn { padding: 6px 10px; border:0; border-radius:6px; cursor:pointer; background:#e2e8f0; }
+  .btn:hover { background:#cbd5e1; }
+  
+  /* nicer empty state */
+  .empty { text-align:center; padding:32px; border:1px dashed #cbd5e1; border-radius:12px; color:#64748b; background:#f8fafc; }
+
+  .logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #e2e8f0;
+    color: #475569;
+    font-weight: bold;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* totals widget */
+.totals {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 12px;
+    margin: 12px 0 16px;
+  }
+  
+  .totalCard {
+    background: #ffffff;
+    border: 1px solid #eef2f7;
+    border-radius: 12px;
+    padding: 12px 14px;
+    box-shadow: 0 2px 6px rgba(0,0,0,.04);
+  }
+  
+  .totalLabel {
+    color: #64748b;
+    font-size: 0.85rem;
+    margin-bottom: 6px;
+  }
+  
+  .totalValue {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  
+.upcomingList { display: grid; gap: 10px; }
+.upcomingItem { display:flex; justify-content:space-between; align-items:center; }
+.upcomingName { font-weight: 600; }
+.upcomingMeta { display:flex; gap: 12px; color:#64748b; font-size:.9rem; }
+
+
+.totalsControls { display:flex; gap:12px; align-items:center; justify-content:space-between; margin: 8px 0 8px; }
+.segment { display:inline-flex; border:1px solid #e2e8f0; border-radius:8px; overflow:hidden; }
+.segmentBtn { padding:6px 10px; background:#f8fafc; border:0; cursor:pointer; }
+.segmentBtn + .segmentBtn { border-left:1px solid #e2e8f0; }
+.segmentActive { background:#0ea5e9; color:#fff; }
+.selectInline { padding:6px 10px; border:1px solid #e2e8f0; border-radius:8px; }
