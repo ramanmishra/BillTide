@@ -32,4 +32,6 @@ export default withSession(async function handler(req: AuthenticatedRequest, res
         const items = await db.select().from(subscriptions).where(eq(subscriptions.ownerId, ownerId))
         return res.status(200).json({ subscriptions: items })
     }
+
+    return res.status(405).json({ error: 'Method not allowed' })
 })
