@@ -6,13 +6,6 @@ import { getEmailProvider } from '../../../lib/email'
 import { upcomingSubject, upcomingHtml } from '../../../lib/email/templates/upcoming'
 import { users } from '../../../lib/db/schema'
 
-// MVP recipient resolver: for now use a single fallback email from env.
-// Later: look up user email via IDM or a local 'users' table.
-async function resolveRecipient(ownerId: string) {
-    const row = await db.select().from(users).where(eq(users.ownerId, ownerId)).limit(1)
-    return row[0]?.email || null
-}
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' })
 
@@ -55,18 +48,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         const effectiveDays = Number(prefs.reminderDays ?? days)
         // (optional) you can re-filter items by effectiveDays if you want per-user window
-        await provider.send({ to, subject: upcomingSubject(effectiveDays), html: upcomingHtml(ownerId, items, effectiveDays) })
-    }
-
-    for (const [ownerId, items] of Array.from(byOwner.entries())) {
-        const to = await resolveRecipient(ownerId)
-        if (!to) continue // skip owners with no resolvable email in MVP
-        await provider.send({
-            to,
-            subject: upcomingSubject(days),
-            html: upcomingHtml(ownerId, items, days),
-        })
-        sent++
+        try {
+            await provider.send({
+                to,
+                subject: upcomingSubject(effectiveDays),
+                html: upcomingHtml(ownerId, items, effectiveDays),
+            })
+            sent++
+        } catch (err) {
+            console.error(`Failed to send reminder for ${ownerId}`, err)
+        }
     }
 
     return res.status(200).json({ ownersEmailed: sent, itemsConsidered: rows.length })
