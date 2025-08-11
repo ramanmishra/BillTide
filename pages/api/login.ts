@@ -32,9 +32,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { access_token, expires_in } = response.data
 
+    // Use SameSite=Lax to help mitigate CSRF by not sending the cookie on
+    // cross-site subrequests while allowing top-level navigation.
     res.setHeader('Set-Cookie', cookieLib.serialize('token', access_token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
       maxAge: expires_in,
       path: '/'
     }))
