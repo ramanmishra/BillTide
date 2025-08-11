@@ -4,7 +4,7 @@ import { withSession, AuthenticatedRequest } from '../../../lib/middleware/withS
 import { db } from '../../../lib/db/client'
 import { users } from '../../../lib/db/schema'
 import { eq } from 'drizzle-orm'
-import type { UserSettings } from '../../../lib/settings/types'
+import { settingsSchema } from '../../../lib/validation/settings'
 
 export default withSession(async function handler(req: AuthenticatedRequest & NextApiRequest, res: NextApiResponse) {
     const ownerId = (req.user?.client_id || req.user?.username || req.user?.user_name) as string
@@ -21,26 +21,30 @@ export default withSession(async function handler(req: AuthenticatedRequest & Ne
     }
 
     if (req.method === 'PUT') {
-        const body = req.body as UserSettings
-        await db
-            .insert(users)
-            .values({
-                ownerId,
-                email: body.email,
-                displayName: body.displayName || ownerId,
-                preferences: body.preferences,
-                updatedAt: new Date(),
-            })
-            .onConflictDoUpdate({
-                target: users.ownerId,
-                set: {
+        try {
+            const body = settingsSchema.parse(req.body)
+            await db
+                .insert(users)
+                .values({
+                    ownerId,
                     email: body.email,
                     displayName: body.displayName || ownerId,
                     preferences: body.preferences,
                     updatedAt: new Date(),
-                },
-            })
-        return res.status(200).json({ success: true })
+                })
+                .onConflictDoUpdate({
+                    target: users.ownerId,
+                    set: {
+                        email: body.email,
+                        displayName: body.displayName || ownerId,
+                        preferences: body.preferences,
+                        updatedAt: new Date(),
+                    },
+                })
+            return res.status(200).json({ success: true })
+        } catch (e: any) {
+            return res.status(400).json({ errors: e?.errors || e })
+        }
     }
 
     return res.status(405).json({ error: 'Method not allowed' })
