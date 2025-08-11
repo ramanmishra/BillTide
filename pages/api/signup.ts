@@ -32,8 +32,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             },
             roles: []
         })
-
-        res.status(201).json({ success: true })
         await db
             .insert(users)
             .values({ ownerId: displayName, email, displayName: displayName })
@@ -41,12 +39,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 target: users.ownerId,
                 set: { email, displayName: displayName, updatedAt: new Date() },
             })
+
+        return res.status(201).json({ success: true })
     } catch (err: any) {
         console.error('Signup error:', err.response?.data || err.message)
         console.log(`${err.message}`)
         if (err.message.includes('status code 409')) {
-            res.status(409).json({ error: 'username already exists!!' })
+            return res.status(409).json({ error: 'Username already exists' })
         }
-        res.status(400).json({ error: 'Signup failed!!' })
+        return res.status(500).json({ error: 'Signup failed' })
     }
 }
